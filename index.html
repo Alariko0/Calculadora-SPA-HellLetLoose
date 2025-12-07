@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hell Let Loose - Calculadora SPA</title>
+  <link rel="stylesheet" href="style.css">
+ 
+
+
+<body>
+
+<!-- Selector de idioma -->
+<div id="languageSelector" class="language-selector">
+  <button class="lang-btn" data-lang="es">🇪🇸</button>
+  <button class="lang-btn" data-lang="en">🇬🇧</button>
+  <button class="lang-btn" data-lang="fr">🇫🇷</button>
+  <button class="lang-btn" data-lang="de">🇩🇪</button>
+  <button class="lang-btn" data-lang="it">🇮🇹</button>
+  <button class="lang-btn" data-lang="ar">🇸🇦</button>
+  <button class="lang-btn" data-lang="zh_CN">🇨🇳</button>
+  <button class="lang-btn" data-lang="zh_TW">🇹🇼</button>
+  <button class="lang-btn" data-lang="hr">🇭🇷</button>
+  <button class="lang-btn" data-lang="da">🇩🇰</button>
+  <button class="lang-btn" data-lang="nl">🇳🇱</button>
+  <button class="lang-btn" data-lang="tl">🇵🇭</button>
+  <button class="lang-btn" data-lang="ja">🇯🇵</button>
+  <button class="lang-btn" data-lang="ko">🇰🇷</button>
+  <button class="lang-btn" data-lang="pl">🇵🇱</button>
+  <button class="lang-btn" data-lang="pt">🇵🇹</button>
+  <button class="lang-btn" data-lang="pt_BR">🇧🇷</button>
+  <button class="lang-btn" data-lang="ru">🇷🇺</button>
+  <button class="lang-btn" data-lang="sv">🇸🇪</button>
+  <button class="lang-btn" data-lang="th">🇹🇭</button>
+  <button class="lang-btn" data-lang="tr">🇹🇷</button>
+  <button class="lang-btn" data-lang="uk">🇺🇦</button>
+  <button class="lang-btn" data-lang="ur">🇵🇰</button>
+  <button class="lang-btn" data-lang="vi">🇻🇳</button>
+</div>
+
+<!-- Botón navegación -->
+<button id="btnNavegar" class="nav-btn" title="">+</button>
+
+<!-- ===== VISTA CALCULADORA ===== -->
+<div id="vistaCalculadora" class="vista activa">
+  <div class="tank-panel">
+    <h1 data-i18n="title">🎯 Calculadora SPA - Hell Let Loose</h1>
+    <div class="calculadora-content">
+
+      <!-- Selectores principales -->
+      <div class="controls">
+        <div class="input-group">
+          <label for="selectorSPA" data-i18n="spaType">Tipo de SPA</label>
+          <select id="selectorSPA">
+            <option value="KV-2">KV-2 (Soviético)</option>
+            <option value="Sherman M4A3 105">Sherman M4A3 105 (USA)</option>
+            <option value="Sturmpanzer IV Brummbär">Sturmpanzer IV Brummbär (Alemán)</option>
+            <option value="Panzer III Ausf.N">Panzer III Ausf.N (Alemán)</option>
+            <option value="Churchill Mk III A.V.R.E.">Churchill Mk III A.V.R.E. (UK)</option>
+            <option value="Bishop SP 25pdr">Bishop SP 25pdr (UK)</option>
+          </select>
+        </div>
+
+        <div class="input-group">
+          <label data-i18n="fireMode">Modo de disparo</label>
+          <div class="fire-mode-toggle">
+            <button id="btnIndirecto" class="fire-mode-btn active" data-mode="indirecto" title="">
+              🟠 <span data-i18n="indirectFire"></span>
+            </button>
+            <button id="btnDirecto" class="fire-mode-btn" data-mode="directo" title="">
+              🔵 <span data-i18n="directFire"></span>
+            </button>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- Inputs de cálculo -->
+      <div class="controls">
+        <div class="input-group">
+          <label for="distancia" data-i18n="distance">Distancia (m)</label>
+          <input type="number" id="distancia" placeholder="" min="20" max="600" step="5">
+        </div>
+
+        <div class="input-group">
+          <label for="terrenoMIL" data-i18n="terrainElevation">Elevación terreno (MIL)</label>
+          <input type="number" id="terrenoMIL" placeholder="" value="0">
+        </div>
+      </div>
+
+      <!-- Botón calcular -->
+      <div class="button-group">
+        <button id="calcularBtn" class="btn-primary" data-i18n="calculateBtn">🎯 Calcular MIL Final</button>
+      </div>
+
+      <!-- Warnings -->
+      <div id="warningDiv"></div>
+
+      <!-- Resultado -->
+      <div class="result">
+        <div class="result-label" data-i18n="result">MIL Final:</div>
+        <span id="resultadoMIL" class="result-value">---</span>
+        <div id="infoDisparo" class="result-info"></div>
+      </div>
+<!-- ===== TABLA DE CONVERSIONES RÁPIDAS ===== -->
+<div class="quick-table-section">
+  <h3 data-i18n="quickTable">📊 Tabla de Conversiones Rápidas</h3>
+  <div class="table-container">
+    <table id="quickConversionTable">
+      <thead>
+        <tr>
+          <th data-i18n="tableDistance">Distancia (m)</th>
+          <th data-i18n="tableKv2MIL">KV-2 MIL</th>
+          <th data-i18n="tableShermanMIL">Sherman 105 MIL</th>
+          <th data-i18n="tableBrummbarMIL">Brummbär MIL</th>
+          <th data-i18n="tablePanzer3MIL">Panzer III MIL</th>
+          <th data-i18n="tableChurchillMIL">Churchill MIL</th>
+          <th data-i18n="tableBishopMIL">Bishop MIL</th>
+        </tr>
+      </thead>
+      <tbody id="quickTableBody">
+        <!-- Se llenará con JavaScript -->
+      </tbody>
+    </table>
+  </div>
+</div>
+<!-- Modal para imagen ampliada -->
+<div id="imageModal" class="modal">
+  <span class="close-modal">&times;</span>
+  <img class="modal-content" id="modalImage">
+  <div id="modalCaption"></div>
+</div>
+
+      <!-- Historial -->
+      <div class="history-section">
+        <h3 data-i18n="historyTitle">📋 Historial de Cálculos</h3>
+        <div class="history-panel">
+          <ul id="listaHistorialMIL"></ul>
+        </div>
+        <div class="button-group">
+          <button id="borrarHistorialMIL" class="btn-danger" data-i18n="clearHistory">🗑️ Borrar historial</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div> <!-- /vistaCalculadora -->
+
+<!-- ===== VISTA INTRODUCCIÓN DE DATOS ===== -->
+<div id="vistaDatos" class="vista">
+  <div class="tank-panel">
+    <h1 data-i18n="dataTitle">📊 Introducción de Datos</h1>
+    <p class="subtitulo" data-i18n="dataSubtitle">Registra datos de disparos para análisis y mejora de tablas</p>
+
+    <!-- Importar CSV -->
+    <div class="seccion-datos">
+      <h3 data-i18n="importCSV">📤 Importar desde CSV</h3>
+      <div class="csv-upload">
+        <input type="file" id="csvFile" accept=".csv">
+        <button id="btnImportarCSV" class="btn-secondary" data-i18n="importBtn">Importar CSV</button>
+      </div>
+      <p class="hint" data-i18n="csvFormat">Formato: spa,modo_disparo,elevacion_terreno,mil_canon,distancia</p>
+    </div>
+
+    <!-- Introducción manual -->
+    <div class="seccion-datos">
+      <h3 data-i18n="manualEntry">✏️ Introduccion Manual</h3>
+      <div class="controls">
+
+        <!-- Selección de SPA -->
+        <div class="input-group">
+          <label for="inputSPA" data-i18n="spaType">Tipo de SPA</label>
+          <select id="inputSPA">
+            <option value="KV-2">KV-2</option>
+            <option value="Sherman M4A3 105">Sherman M4A3 105</option>
+            <option value="Sturmpanzer IV Brummbär">Sturmpanzer IV Brummbär</option>
+            <option value="Panzer III Ausf.N">Panzer III Ausf.N</option>
+            <option value="Churchill Mk III A.V.R.E.">Churchill Mk III A.V.R.E.</option>
+            <option value="Bishop SP 25pdr">Bishop SP 25pdr</option>
+          </select>
+        </div>
+
+        <!-- MODO DE DISPARO – BOTONES (en vez de SELECT) -->
+        <div class="input-group">
+          <label data-i18n="fireMode">Modo de disparo</label>
+          <div id="manualFireModeButtons" class="fire-mode-toggle">
+                        <!-- Indirecto: activo por defecto -->
+            <button id="btnManualIndirecto"
+                    class="fire-mode-btn active"
+                    data-mode="indirecto"
+                    title="">
+              🟠 <span data-i18n="indirectFire"></span>
+            </button>
+
+            <!-- Directo: no activo por defecto -->
+            <button id="btnManualDirecto"
+                    class="fire-mode-btn"
+                    data-mode="directo"
+                    title="">
+              🔵 <span data-i18n="directFire"></span>
+            </button>
+          </div>
+        </div>
+
+      </div> <!-- /controls -->
+
+      <div class="controls">
+        <div class="input-group">
+          <label for="inputCanon" data-i18n="canonMIL">MIL Cañón</label>
+          <input type="number" id="inputCanon" placeholder="">
+        </div>
+
+        <div class="input-group">
+          <label for="inputTerreno" data-i18n="terrainElevation">Elevación terreno (MIL)</label>
+          <input type="number" id="inputTerreno" placeholder="">
+        </div>
+
+        <div class="input-group">
+          <label for="inputDistancia" data-i18n="distance">Distancia (m)</label>
+          <input type="number" id="inputDistancia" placeholder="">
+        </div>
+      </div> <!-- /controls -->
+
+      <div class="button-group">
+        <button id="btnGuardarDato" class="btn-primary" data-i18n="saveData">💾 Guardar Dato</button>
+      </div>
+    </div>
+
+    <!-- Lista de datos guardados -->
+    <div class="seccion-datos">
+      <h3 data-i18n="registeredData">📋 Datos Registrados (<span id="contadorDatos">0</span>)</h3>
+      <div class="history-panel datos-panel">
+        <ul id="listaDatosGuardados"></ul>
+      </div>
+
+      <div class="button-group acciones-datos">
+        <button id="btnExportarJSON" class="btn-secondary" data-i18n="exportJSON">📥 Exportar JSON</button>
+        <button id="btnBorrarDatos" class="btn-danger" data-i18n="deleteAll">🗑️ Borrar Todo</button>
+      </div>
+    </div>
+
+</div> <!-- /tank-panel -->
+</div> <!-- /vistaDatos -->
+  <script src="/modules/conversionTables.js"></script>
+  <script src="/modules/i18n.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
