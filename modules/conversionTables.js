@@ -2,6 +2,9 @@
 // TABLAS COMUNES PARA OPTIMIZACIÓN
 // ================================================
 
+// Sistema de cache global
+const interpolationCache = new Map();
+
 // Tabla común para la mayoría de SPA (KV-2, Sherman M4A3 105, etc.)
 const commonDirectTable = [
   {m:20, mil:-87},{m:25, mil:-35},{m:30, mil:-30},{m:35, mil:-27},{m:40, mil:-23},
@@ -156,27 +159,44 @@ const conversionTables = {
 };
 
 // ================================================
-// CLASE BALÍSTICA SIMPLIFICADA Y FUNCIONAL
+// CLASE BALÍSTICA OPTIMIZADA CON CACHE
 // ================================================
 
 class BalisticsCalculator {
   /**
-   * Interpolación lineal simple (para compatibilidad con tu script.js)
+   * Interpolación con cache
    */
-  static linearInterpolation(table, distance) {
+  static linearInterpolation(spaType, mode, distance, table) {
     if (!table || table.length === 0) return null;
+    
+    const cacheKey = `${spaType}_${mode}_${distance.toFixed(1)}`;
+    
+    // Verificar cache primero
+    if (interpolationCache.has(cacheKey)) {
+      return interpolationCache.get(cacheKey);
+    }
     
     const sorted = [...table].sort((a, b) => a.m - b.m);
     
     // Si la distancia está fuera del rango, devolver el valor más cercano
-    if (distance <= sorted[0].m) return sorted[0].mil;
-    if (distance >= sorted[sorted.length - 1].m) return sorted[sorted.length - 1].mil;
+    if (distance <= sorted[0].m) {
+      const result = sorted[0].mil;
+      interpolationCache.set(cacheKey, result);
+      return result;
+    }
+    if (distance >= sorted[sorted.length - 1].m) {
+      const result = sorted[sorted.length - 1].mil;
+      interpolationCache.set(cacheKey, result);
+      return result;
+    }
     
     // Buscar el intervalo
     for (let i = 0; i < sorted.length - 1; i++) {
       if (distance >= sorted[i].m && distance <= sorted[i + 1].m) {
         const ratio = (distance - sorted[i].m) / (sorted[i + 1].m - sorted[i].m);
-        return sorted[i].mil + ratio * (sorted[i + 1].mil - sorted[i].mil);
+        const result = sorted[i].mil + ratio * (sorted[i + 1].mil - sorted[i].mil);
+        interpolationCache.set(cacheKey, result);
+        return result;
       }
     }
     
@@ -184,21 +204,37 @@ class BalisticsCalculator {
   }
   
   /**
-   * Interpolación cuadrática mejorada
+   * Interpolación cuadrática mejorada con cache
    */
-  static quadraticInterpolation(table, distance) {
-    if (!table || table.length < 3) return this.linearInterpolation(table, distance);
+  static quadraticInterpolation(spaType, mode, distance, table) {
+    if (!table || table.length < 3) {
+      return this.linearInterpolation(spaType, mode, distance, table);
+    }
+    
+    const cacheKey = `${spaType}_${mode}_q_${distance.toFixed(1)}`;
+    
+    if (interpolationCache.has(cacheKey)) {
+      return interpolationCache.get(cacheKey);
+    }
     
     const sorted = [...table].sort((a, b) => a.m - b.m);
     
-    if (distance <= sorted[0].m) return sorted[0].mil;
-    if (distance >= sorted[sorted.length - 1].m) return sorted[sorted.length - 1].mil;
+    if (distance <= sorted[0].m) {
+      const result = sorted[0].mil;
+      interpolationCache.set(cacheKey, result);
+      return result;
+    }
+    if (distance >= sorted[sorted.length - 1].m) {
+      const result = sorted[sorted.length - 1].mil;
+      interpolationCache.set(cacheKey, result);
+      return result;
+    }
     
     // Encontrar índice del punto más cercano
     let idx = 0;
     while (idx < sorted.length - 1 && sorted[idx].m < distance) idx++;
     
-    // Obtener 3 puntos alrededor (asegurando que estén dentro de los límites)
+    // Obtener 3 puntos alrededor
     const p0 = sorted[Math.max(0, idx - 1)];
     const p1 = sorted[idx];
     const p2 = sorted[Math.min(sorted.length - 1, idx + 1)];
@@ -208,7 +244,9 @@ class BalisticsCalculator {
     const L1 = ((distance - p0.m) * (distance - p2.m)) / ((p1.m - p0.m) * (p1.m - p2.m));
     const L2 = ((distance - p0.m) * (distance - p1.m)) / ((p2.m - p0.m) * (p2.m - p1.m));
     
-    return L0 * p0.mil + L1 * p1.mil + L2 * p2.mil;
+    const result = L0 * p0.mil + L1 * p1.mil + L2 * p2.mil;
+    interpolationCache.set(cacheKey, result);
+    return result;
   }
   
   /**
@@ -218,17 +256,32 @@ class BalisticsCalculator {
     const table = conversionTables[spaType]?.[mode];
     if (!table || table.length === 0) return null;
     
-    // 1. Buscar valor exacto
-    const exact = table.find(item => Math.abs(item.m - distance) < 0.001);
-    if (exact) return exact.mil;
+    const cacheKey = `${spaType}_${mode}_s_${distance.toFixed(1)}`;
     
-    // 2. Usar interpolación cuadrática si hay suficientes puntos
-    if (table.length >= 3) {
-      return this.quadraticInterpolation(table, distance);
+    if (interpolationCache.has(cacheKey)) {
+      return interpolationCache.get(cacheKey);
     }
     
-    // 3. Interpolación lineal como fallback
-    return this.linearInterpolation(table, distance);
+    // 1. Buscar valor exacto
+    const exact = table.find(item => Math.abs(item.m - distance) < 0.001);
+    if (exact) {
+      interpolationCache.set(cacheKey, exact.mil);
+      return exact.mil;
+    }
+    
+    // 2. Usar interpolación cuadrática si hay suficientes puntos
+    let result;
+    if (table.length >= 3) {
+      result = this.quadraticInterpolation(spaType, mode, distance, table);
+    } else {
+      result = this.linearInterpolation(spaType, mode, distance, table);
+    }
+    
+    if (result !== null) {
+      interpolationCache.set(cacheKey, result);
+    }
+    
+    return result;
   }
   
   /**
@@ -263,18 +316,21 @@ class BalisticsCalculator {
   }
   
   /**
-   * Seleccionar el mejor método de interpolación
+   * Limpiar cache
    */
-  static selectBestMethod(table) {
-    if (!table || table.length === 0) return 'linear';
-    
-    const range = table[table.length - 1].m - table[0].m;
-    const density = table.length / range;
-    
-    if (table.length >= 4 && density > 0.1) {
-      return 'quadratic';
-    }
-    return 'linear';
+  static clearCache() {
+    interpolationCache.clear();
+    console.log('🧹 Cache de interpolación limpiado');
+  }
+  
+  /**
+   * Obtener estadísticas del cache
+   */
+  static getCacheStats() {
+    return {
+      size: interpolationCache.size,
+      keys: Array.from(interpolationCache.keys()).slice(0, 5) // Primeras 5 claves
+    };
   }
   
   /**
@@ -288,7 +344,7 @@ class BalisticsCalculator {
     let maxError = 0;
     let validPoints = 0;
     
-    // Evaluar puntos intermedios (omitir los extremos)
+    // Evaluar puntos intermedios
     for (let i = 1; i < table.length - 1; i++) {
       const point = table[i];
       const calculated = this.smartInterpolation(spaType, mode, point.m);
@@ -389,6 +445,20 @@ window.ballisticsUtils = {
     }
     
     return quickTable;
+  },
+  
+  /**
+   * Limpiar cache
+   */
+  clearCache: function() {
+    BalisticsCalculator.clearCache();
+  },
+  
+  /**
+   * Obtener estadísticas del cache
+   */
+  getCacheStats: function() {
+    return BalisticsCalculator.getCacheStats();
   }
 };
 
@@ -403,7 +473,7 @@ window.conversionTables = conversionTables;
 // INICIALIZACIÓN Y PRUEBAS
 // ================================================
 
-// Función para mostrar estadísticas en consola (opcional)
+// Función para mostrar estadísticas en consola
 window.showBallisticsStats = function() {
   console.log('📊 Estadísticas de Interpolación por SPA:');
   
@@ -420,14 +490,18 @@ window.showBallisticsStats = function() {
       }
     }
   }
+  
+  // Mostrar estadísticas del cache
+  const cacheStats = BalisticsCalculator.getCacheStats();
+  console.log(`\n🧠 Cache: ${cacheStats.size} entradas`);
 };
 
-// Cargar al inicio (opcional)
+// Cargar al inicio
 document.addEventListener('DOMContentLoaded', function() {
   console.log('✅ Calculadora balística optimizada cargada');
   
   // Mostrar estadísticas en consola si está en modo debug
-  if (window.location.hash.includes('debug')) {
+  if (localStorage.getItem('debug') === 'true') {
     setTimeout(() => {
       window.showBallisticsStats();
     }, 1000);

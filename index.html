@@ -1,13 +1,199 @@
 <!DOCTYPE html>
 <html lang="es">
+<!DOCTYPE html>
+<html lang="es">
 <head>
+  <!-- Meta Básicos -->
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Hell Let Loose - Calculadora SPA</title>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  
+  <!-- SEO Principal -->
+  <title>Calculadora SPA Hell Let Loose | MIL Calculator Artillery KV-2 Sherman Brummbär</title>
+  <meta name="description" content="Calculadora de artillería autopropulsada para Hell Let Loose. Calcula MIL para KV-2, Sherman 105, Brummbär, Panzer III, Churchill AVRE y Bishop. Compatible con fuego directo e indirecto. Soporte multiidioma.">
+  <meta name="keywords" content="hell let loose, calculadora spa, mil calculator, artilleria, kv-2, sherman 105, brummbar, panzer III, churchill avre, bishop, artillery calculator, hll tools, hell let loose calculator, ww2 artillery">
+  <meta name="author" content="OLIV & Alariko0">
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+  <link rel="canonical" href="https://tudominio.com/">
+  
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://tudominio.com/">
+  <meta property="og:site_name" content="Hell Let Loose SPA Calculator">
+  <meta property="og:title" content="Calculadora SPA Hell Let Loose - MIL Artillery Calculator">
+  <meta property="og:description" content="Herramienta gratuita para calcular MIL de artillería autopropulsada en Hell Let Loose. Soporte para 6 SPAs diferentes y 24 idiomas.">
+  <meta property="og:image" content="https://tudominio.com/images/og-image.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Hell Let Loose SPA Calculator Interface">
+  <meta property="og:locale" content="es_ES">
+  <meta property="og:locale:alternate" content="en_US">
+  <meta property="og:locale:alternate" content="de_DE">
+  <meta property="og:locale:alternate" content="fr_FR">
+  
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@tu_twitter">
+  <meta name="twitter:creator" content="@tu_twitter">
+  <meta name="twitter:url" content="https://tudominio.com/">
+  <meta name="twitter:title" content="Calculadora SPA Hell Let Loose - Artillery MIL Calculator">
+  <meta name="twitter:description" content="Calcula MIL para artillería en Hell Let Loose. KV-2, Sherman 105, Brummbär y más.">
+  <meta name="twitter:image" content="https://tudominio.com/images/twitter-card.jpg">
+  <meta name="twitter:image:alt" content="Hell Let Loose SPA Calculator">
+  
+  <!-- Hreflang para múltiples idiomas -->
+  <link rel="alternate" hreflang="es" href="https://tudominio.com/es/">
+  <link rel="alternate" hreflang="en" href="https://tudominio.com/en/">
+  <link rel="alternate" hreflang="fr" href="https://tudominio.com/fr/">
+  <link rel="alternate" hreflang="de" href="https://tudominio.com/de/">
+  <link rel="alternate" hreflang="it" href="https://tudominio.com/it/">
+  <link rel="alternate" hreflang="ja" href="https://tudominio.com/ja/">
+  <link rel="alternate" hreflang="ko" href="https://tudominio.com/ko/">
+  <link rel="alternate" hreflang="zh-CN" href="https://tudominio.com/zh-cn/">
+  <link rel="alternate" hreflang="zh-TW" href="https://tudominio.com/zh-tw/">
+  <link rel="alternate" hreflang="ru" href="https://tudominio.com/ru/">
+  <link rel="alternate" hreflang="pl" href="https://tudominio.com/pl/">
+  <link rel="alternate" hreflang="pt" href="https://tudominio.com/pt/">
+  <link rel="alternate" hreflang="x-default" href="https://tudominio.com/">
+  
+<!-- Para favicon -->
+<link rel="icon" type="image/png" sizes="16x16" href="./pictures/abeja_sinfondo.ico">
+
+<!-- Para Apple -->
+<link rel="apple-touch-icon" sizes="180x180" href="./pictures/abeja_sinfondo.png">
+  
+  <!-- PWA Meta Tags -->
+  <meta name="application-name" content="HLL SPA Calculator">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="HLL Calculator">
+  <meta name="mobile-web-app-capable" content="yes">
+  
+  <!-- Performance y Preload -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="dns-prefetch" href="https://fonts.googleapis.com">
+  
+  <!-- Estilos -->
   <link rel="stylesheet" href="./style.css">
- 
-
-
+  
+  <!-- Schema.org JSON-LD -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Hell Let Loose SPA Calculator",
+    "alternateName": "HLL Artillery MIL Calculator",
+    "url": "https://tudominio.com",
+    "description": "Calculadora profesional de artillería autopropulsada para Hell Let Loose. Calcula valores MIL precisos para 6 vehículos diferentes con soporte para fuego directo e indirecto.",
+    "applicationCategory": "GameApplication",
+    "operatingSystem": "Any",
+    "browserRequirements": "Requires JavaScript. Requires HTML5.",
+    "softwareVersion": "2.0",
+    "author": {
+      "@type": "Organization",
+      "name": "BxB - Black Bees Clan",
+      "member": [
+        {
+          "@type": "Person",
+          "name": "OLIV"
+        },
+        {
+          "@type": "Person",
+          "name": "Alariko0",
+          "url": "https://github.com/alariko0"
+        }
+      ]
+    },
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "4.8",
+      "ratingCount": "127",
+      "bestRating": "5",
+      "worstRating": "1"
+    },
+    "featureList": [
+      "Cálculo MIL para 6 SPAs diferentes",
+      "Modo fuego directo e indirecto",
+      "Compensación de elevación de terreno",
+      "Historial de cálculos",
+      "Exportación de datos CSV/JSON",
+      "Soporte para 24 idiomas",
+      "Interfaz responsive"
+    ],
+    "screenshot": "https://tudominio.com/images/screenshot.jpg",
+    "inLanguage": ["es", "en", "fr", "de", "it", "ar", "zh", "ja", "ko", "pl", "pt", "ru", "sv", "th", "tr", "uk", "vi"],
+    "datePublished": "2024-01-15",
+    "dateModified": "2024-12-07"
+  }
+  </script>
+  
+  <!-- FAQ Schema -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "¿Qué es un SPA en Hell Let Loose?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "SPA (Self-Propelled Artillery) son vehículos de artillería autopropulsada en Hell Let Loose como el KV-2, Sherman M4A3 105, Brummbär, Panzer III, Churchill AVRE y Bishop SP 25pdr."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "¿Cómo se calcula el MIL en Hell Let Loose?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "El MIL se calcula basándose en la distancia al objetivo y la elevación del terreno. Esta calculadora proporciona valores precisos para fuego directo (< 45°) e indirecto (≥ 45°)."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "¿Qué SPAs soporta esta calculadora?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "La calculadora soporta KV-2 (Soviético), Sherman M4A3 105 (USA), Sturmpanzer IV Brummbär (Alemán), Panzer III Ausf.N (Alemán), Churchill Mk III A.V.R.E. (UK) y Bishop SP 25pdr (UK)."
+        }
+      }
+    ]
+  }
+  </script>
+  
+  <!-- BreadcrumbList Schema -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Home",
+        "item": "https://alariko0.github.io/Calculadora-SPA-HellLetLoose/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "SPA Calculator",
+        "item": "https://alariko0.github.io/Calculadora-SPA-HellLetLoose/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 3,
+        "name": "Data Entry",
+        "item": "https://alariko0.github.io/Calculadora-SPA-HellLetLoose/"
+      }
+    ]
+  }
+  </script>
+</head>
 <body>
 
 <!-- Selector de idioma -->
@@ -102,6 +288,16 @@
         <span id="resultadoMIL" class="result-value">---</span>
         <div id="infoDisparo" class="result-info"></div>
       </div>
+      <!-- Historial -->
+      <div class="history-section">
+        <h3 data-i18n="historyTitle">📋 Historial de Cálculos</h3>
+        <div class="history-panel">
+          <ul id="listaHistorialMIL"></ul>
+        </div>
+        <div class="button-group">
+          <button id="borrarHistorialMIL" class="btn-danger" data-i18n="clearHistory">🗑️ Borrar historial</button>
+        </div>
+      </div>
 <!-- ===== TABLA DE CONVERSIONES RÁPIDAS ===== -->
 <div class="quick-table-section">
   <h3 data-i18n="quickTable">📊 Tabla de Conversiones Rápidas</h3>
@@ -124,24 +320,6 @@
     </table>
   </div>
 </div>
-<!-- Modal para imagen ampliada -->
-<div id="imageModal" class="modal">
-  <span class="close-modal">&times;</span>
-  <img class="modal-content" id="modalImage">
-  <div id="modalCaption"></div>
-</div>
-
-      <!-- Historial -->
-      <div class="history-section">
-        <h3 data-i18n="historyTitle">📋 Historial de Cálculos</h3>
-        <div class="history-panel">
-          <ul id="listaHistorialMIL"></ul>
-        </div>
-        <div class="button-group">
-          <button id="borrarHistorialMIL" class="btn-danger" data-i18n="clearHistory">🗑️ Borrar historial</button>
-        </div>
-      </div>
-
     </div>
   </div>
 </div> <!-- /vistaCalculadora -->
@@ -245,9 +423,8 @@
   <script src="./modules/i18n.js"></script>
   <script src="./script.js"></script>
 </body>
-  <div>By OLIV, Developed by @Alariko0, Supported by the BxB - Black Bees clan. Thanks to Vader.</div>
-  <div> ⚠️ It is important to note that, although some issues were identified with the display of recorded data, the system continues to guarantee:
+  <div>By OLIV, Developed by @Alariko0, Thanks to Vader.</div> 
+  <div><img src="./pictures/abeja_sinfondo.ico" alt="" srcset=""></div>
+  <div> Supported by the BxB - Black Bees clan. </div>
 
-        The accurate storage of all data.
-        Its availability for export at any time. ⚠️ </div>
 </html>

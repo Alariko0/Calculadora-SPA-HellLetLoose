@@ -38,26 +38,39 @@ function updateUI() {
     if (langData[key]) el.alt = langData[key];
   });
 
-  /* Actualizar tooltips de botones de modo */
-  document.getElementById('btnDirecto').title = langData.directFireTooltip;
-  document.getElementById('btnIndirecto').title = langData.indirectFireTooltip;
-  document.getElementById('btnManualDirecto').title = langData.directFireTooltip;
-  document.getElementById('btnManualIndirecto').title = langData.indirectFireTooltip;
+  /* Actualizar tooltips de botones de modo - verificar existencia */
+  const btnDirecto = document.getElementById('btnDirecto');
+  const btnIndirecto = document.getElementById('btnIndirecto');
+  const btnManualDirecto = document.getElementById('btnManualDirecto');
+  const btnManualIndirecto = document.getElementById('btnManualIndirecto');
+  
+  if (btnDirecto) btnDirecto.title = langData.directFireTooltip;
+  if (btnIndirecto) btnIndirecto.title = langData.indirectFireTooltip;
+  if (btnManualDirecto) btnManualDirecto.title = langData.directFireTooltip;
+  if (btnManualIndirecto) btnManualIndirecto.title = langData.indirectFireTooltip;
   
   /* Actualizar placeholders */
-  document.getElementById('distancia').placeholder = langData.distance;
-  document.getElementById('terrenoMIL').placeholder = langData.terrainElevation;
-  document.getElementById('inputTerreno').placeholder = langData.terrainElevation;
-  document.getElementById('inputCanon').placeholder = langData.canonMIL;
-  document.getElementById('inputDistancia').placeholder = langData.distance;
+  const distancia = document.getElementById('distancia');
+  const terrenoMIL = document.getElementById('terrenoMIL');
+  const inputTerreno = document.getElementById('inputTerreno');
+  const inputCanon = document.getElementById('inputCanon');
+  const inputDistancia = document.getElementById('inputDistancia');
+  
+  if (distancia) distancia.placeholder = langData.distance;
+  if (terrenoMIL) terrenoMIL.placeholder = langData.terrainElevation;
+  if (inputTerreno) inputTerreno.placeholder = langData.terrainElevation;
+  if (inputCanon) inputCanon.placeholder = langData.canonMIL;
+  if (inputDistancia) inputDistancia.placeholder = langData.distance;
   
   /* Actualizar título del botón de navegación */
   const btnNav = document.getElementById('btnNavegar');
   const vistaCalc = document.getElementById('vistaCalculadora');
-  if (vistaCalc.classList.contains('activa')) {
-    btnNav.title = langData.toggleViewBtnFront;
-  } else {
-    btnNav.title = langData.toggleViewBtnBack;
+  if (btnNav && vistaCalc) {
+    if (vistaCalc.classList.contains('activa')) {
+      btnNav.title = langData.toggleViewBtnFront;
+    } else {
+      btnNav.title = langData.toggleViewBtnBack;
+    }
   }
 
   /* Actualizar botones de modo */
@@ -71,6 +84,11 @@ function updateUI() {
   if (activeBtn) activeBtn.classList.add('active');
 }
 
+function updateImageAltText() {
+  // Función placeholder para futuras imágenes
+  // No hace nada si no hay imágenes
+}
+
 /* ------------------------------------------------------------------
    MODO DE DISPARO (calculadora)
 ------------------------------------------------------------------- */
@@ -79,15 +97,19 @@ function toggleFireMode(mode) {
   const btnDirecto = document.getElementById('btnDirecto');
   const btnIndirecto = document.getElementById('btnIndirecto');
 
-  btnDirecto.classList.toggle('active', mode === 'directo');
-  btnIndirecto.classList.toggle('active', mode === 'indirecto');
+  if (btnDirecto) btnDirecto.classList.toggle('active', mode === 'directo');
+  if (btnIndirecto) btnIndirecto.classList.toggle('active', mode === 'indirecto');
 }
 
 function updateFireModeButtons() {
   const langData = i18n[currentLanguage];
-  const spaType   = document.getElementById('selectorSPA').value;
+  const selectorSPA = document.getElementById('selectorSPA');
   const btnDirecto = document.getElementById('btnDirecto');
   const btnIndirecto = document.getElementById('btnIndirecto');
+
+  if (!selectorSPA || !btnDirecto || !btnIndirecto) return;
+
+  const spaType = selectorSPA.value;
 
   btnDirecto.title = langData.directFireTooltip;
   btnIndirecto.title = langData.indirectFireTooltip;
@@ -106,28 +128,36 @@ function updateFireModeButtons() {
 ------------------------------------------------------------------- */
 function resetFireModeButtons() {
   // Vista calculadora
-  const spaCalc = document.getElementById('selectorSPA').value;
+  const spaCalc = document.getElementById('selectorSPA');
   const btnDirCalc = document.getElementById('btnDirecto');
   const btnIndCalc = document.getElementById('btnIndirecto');
   
-  if (spaCalc === "Bishop SP 25pdr") {
-    btnDirCalc.disabled = true;
-    if (modoDisparo === 'directo') toggleFireMode('indirecto');
-  } else {
-    btnDirCalc.disabled = false;
+  if (spaCalc && btnDirCalc && btnIndCalc) {
+    const spaType = spaCalc.value;
+    
+    if (spaType === "Bishop SP 25pdr") {
+      btnDirCalc.disabled = true;
+      if (modoDisparo === 'directo') toggleFireMode('indirecto');
+    } else {
+      btnDirCalc.disabled = false;
+    }
   }
   
   // Vista datos
-  const spaDatos = document.getElementById('inputSPA').value;
+  const spaDatos = document.getElementById('inputSPA');
   const btnDirDatos = document.getElementById('btnManualDirecto');
   const btnIndDatos = document.getElementById('btnManualIndirecto');
   
-  if (spaDatos === "Bishop SP 25pdr") {
-    btnDirDatos.disabled = true;
-    setManualFireMode('indirecto');
-  } else {
-    btnDirDatos.disabled = false;
-    setManualFireMode(manualModoDisparo);
+  if (spaDatos && btnDirDatos && btnIndDatos) {
+    const spaType = spaDatos.value;
+    
+    if (spaType === "Bishop SP 25pdr") {
+      btnDirDatos.disabled = true;
+      setManualFireMode('indirecto');
+    } else {
+      btnDirDatos.disabled = false;
+      setManualFireMode(manualModoDisparo);
+    }
   }
 }
 
@@ -235,11 +265,15 @@ function updateQuickTableTranslations() {
     if (langData.tableBishopMIL) el.textContent = langData.tableBishopMIL;
   });
 }
+
 /* ------------------------------------------------------------------
    CÁLCULO MIL
 ------------------------------------------------------------------- */
 function getSPATable() {
-  const spaType = document.getElementById('selectorSPA').value;
+  const selectorSPA = document.getElementById('selectorSPA');
+  if (!selectorSPA) return null;
+  
+  const spaType = selectorSPA.value;
   if (!conversionTables[spaType]) return null;
   return modoDisparo === 'directo'
          ? conversionTables[spaType].directo
@@ -279,6 +313,15 @@ function interpolateMIL(distance) {
 function calculateMILFinal() {
   const distanciaEl = document.getElementById('distancia');
   const terrenoEl = document.getElementById('terrenoMIL');
+  const warningDiv = document.getElementById('warningDiv');
+  const resultadoMIL = document.getElementById('resultadoMIL');
+  const infoDisparo = document.getElementById('infoDisparo');
+  const selectorSPA = document.getElementById('selectorSPA');
+  
+  if (!distanciaEl || !terrenoEl || !resultadoMIL || !infoDisparo || !selectorSPA) {
+    console.error('Elementos necesarios no encontrados');
+    return;
+  }
   
   if (!distanciaEl.value || !terrenoEl.value) {
     alert(i18n[currentLanguage].saveDataError);
@@ -288,7 +331,7 @@ function calculateMILFinal() {
   const distance   = parseFloat(distanciaEl.value);
   const terrainMIL = parseFloat(terrenoEl.value);
 
-  document.getElementById('warningDiv').innerHTML = '';
+  if (warningDiv) warningDiv.innerHTML = '';
 
   if (isNaN(distance) || isNaN(terrainMIL)) {
     alert('⚠️ Por favor, introduce valores válidos');
@@ -298,21 +341,18 @@ function calculateMILFinal() {
   const result = interpolateMIL(distance);
   if (!result) { alert('❌ Error al calcular MIL'); return; }
 
-  if (result.warning)
-    document.getElementById('warningDiv').innerHTML =
-      `<div class="warning">${result.warning}</div>`;
+  if (result.warning && warningDiv)
+    warningDiv.innerHTML = `<div class="warning">${result.warning}</div>`;
 
   const finalMIL = (result.mil - terrainMIL).toFixed(2);
-  document.getElementById('resultadoMIL').textContent = `${finalMIL} MIL`;
-  const spaType   = document.getElementById('selectorSPA').value;
-  const modoText  =
-    i18n[currentLanguage][modoDisparo==='directo'?'directFire':'indirectFire'];
-  document.getElementById('infoDisparo')
-          .innerHTML = `<strong>${spaType}</strong> | ${modoText} | ${distance}m`;
+  resultadoMIL.textContent = `${finalMIL} MIL`;
+  const spaType = selectorSPA.value;
+  const modoText = i18n[currentLanguage][modoDisparo==='directo'?'directFire':'indirectFire'];
+  infoDisparo.innerHTML = `<strong>${spaType}</strong> | ${modoText} | ${distance}m`;
 
   const historyEntry = {
-    spa:   spaType,
-    modo:  modoDisparo,
+    spa: spaType,
+    modo: modoDisparo,
     distancia: distance,
     terreno: terrainMIL,
     resultado: finalMIL,
@@ -331,6 +371,8 @@ function calculateMILFinal() {
 ------------------------------------------------------------------- */
 function renderMILCalcHistory() {
   const list = document.getElementById('listaHistorialMIL');
+  if (!list) return;
+  
   list.innerHTML = '';
 
   if (milCalcHistory.length===0){
@@ -367,7 +409,13 @@ function clearMILCalcHistory(){
    DATOS GUARDADOS POR EL USUARIO
 ------------------------------------------------------------------- */
 function setManualFireMode(mode) {
-  const spa = document.getElementById('inputSPA').value;
+  const inputSPA = document.getElementById('inputSPA');
+  const btnDirecto = document.getElementById('btnManualDirecto');
+  const btnIndirecto = document.getElementById('btnManualIndirecto');
+  
+  if (!inputSPA || !btnDirecto || !btnIndirecto) return;
+  
+  const spa = inputSPA.value;
   
   // Si es Bishop y modo directo, forzar modo indirecto
   if (spa === "Bishop SP 25pdr" && mode === "directo") {
@@ -375,9 +423,6 @@ function setManualFireMode(mode) {
   }
   
   manualModoDisparo = mode;
-
-  const btnDirecto   = document.getElementById('btnManualDirecto');
-  const btnIndirecto = document.getElementById('btnManualIndirecto');
 
   // Activar / desactivar los botones visualmente
   btnDirecto.classList.toggle('active', mode === 'directo');
@@ -392,11 +437,21 @@ function setManualFireMode(mode) {
 }
 
 function guardarDatoManual() {
-  const spa     = document.getElementById('inputSPA').value;
-  const modo    = manualModoDisparo;
-  const terreno = parseFloat(document.getElementById('inputTerreno').value);
-  const canon   = parseFloat(document.getElementById('inputCanon').value);
-  const distancia = parseFloat(document.getElementById('inputDistancia').value);
+  const inputSPA = document.getElementById('inputSPA');
+  const inputTerreno = document.getElementById('inputTerreno');
+  const inputCanon = document.getElementById('inputCanon');
+  const inputDistancia = document.getElementById('inputDistancia');
+  
+  if (!inputSPA || !inputTerreno || !inputCanon || !inputDistancia) {
+    console.error('Elementos del formulario no encontrados');
+    return;
+  }
+  
+  const spa = inputSPA.value;
+  const modo = manualModoDisparo;
+  const terreno = parseFloat(inputTerreno.value);
+  const canon = parseFloat(inputCanon.value);
+  const distancia = parseFloat(inputDistancia.value);
 
   if (isNaN(terreno)||isNaN(canon)||isNaN(distancia)){
     alert(i18n[currentLanguage].saveDataError); 
@@ -420,14 +475,22 @@ function guardarDatoManual() {
 }
 
 function limpiarFormularioDatos(){
-  document.getElementById('inputTerreno').value='';
-  document.getElementById('inputCanon').value='';
-  document.getElementById('inputDistancia').value='';
+  const inputTerreno = document.getElementById('inputTerreno');
+  const inputCanon = document.getElementById('inputCanon');
+  const inputDistancia = document.getElementById('inputDistancia');
+  
+  if (inputTerreno) inputTerreno.value='';
+  if (inputCanon) inputCanon.value='';
+  if (inputDistancia) inputDistancia.value='';
 }
 
 function renderDatosGuardados() {
   const list = document.getElementById('listaDatosGuardados');
-  document.getElementById('contadorDatos').textContent = datosRegistrados.length;
+  const contadorDatos = document.getElementById('contadorDatos');
+  
+  if (!list) return;
+  
+  if (contadorDatos) contadorDatos.textContent = datosRegistrados.length;
   list.innerHTML='';
 
   if(datosRegistrados.length===0){
@@ -495,7 +558,10 @@ function exportarJSON(){
    IMPORTAR CSV
 ------------------------------------------------------------------- */
 function importarCSV(){
-  const file=document.getElementById('csvFile').files[0];
+  const csvFile = document.getElementById('csvFile');
+  if (!csvFile) return;
+  
+  const file = csvFile.files[0];
   if(!file){ alert(i18n[currentLanguage].importError); return; }
 
   const reader=new FileReader();
@@ -532,7 +598,9 @@ function procesarCSV(content){
   guardarDatosJSON();
   renderDatosGuardados();
   alert(`${i18n[currentLanguage].importSuccess}\n- ${importados} registros\n- ${errores} errores`);
-  document.getElementById('csvFile').value='';
+  
+  const csvFileInput = document.getElementById('csvFile');
+  if (csvFileInput) csvFileInput.value='';
 }
 
 /* ------------------------------------------------------------------
@@ -542,6 +610,8 @@ function toggleVista(){
   const vistaCalc=document.getElementById('vistaCalculadora');
   const vistaDatos=document.getElementById('vistaDatos');
   const btnNav=document.getElementById('btnNavegar');
+
+  if (!vistaCalc || !vistaDatos || !btnNav) return;
 
   if(vistaCalc.classList.contains('activa')){
     vistaCalc.classList.remove('activa');
@@ -581,6 +651,9 @@ function loadHistory(){
   
   // Configurar modal de imagen
   setupImageModal();
+  
+  // Generar tabla de conversiones rápidas
+  generateQuickTable();
 }
 
 function setupImageModal() {
@@ -590,7 +663,7 @@ function setupImageModal() {
   const quickConversionImage = document.getElementById('quickConversionImage');
   const closeBtn = document.querySelector('.close-modal');
 
-  if (quickConversionImage) {
+  if (quickConversionImage && modal && modalImg && captionText) {
     quickConversionImage.onclick = function() {
       modal.style.display = "block";
       modalImg.src = this.src;
@@ -598,7 +671,7 @@ function setupImageModal() {
     }
   }
 
-  if (closeBtn) {
+  if (closeBtn && modal) {
     closeBtn.onclick = function() {
       modal.style.display = "none";
     }
@@ -635,17 +708,27 @@ function updateResultado(){
 ------------------------------------------------------------------- */
 document.addEventListener('DOMContentLoaded', function() {
   // Botones de navegación y cálculo
-  document.getElementById('btnNavegar').addEventListener('click', toggleVista);
-  document.getElementById('calcularBtn').addEventListener('click', calculateMILFinal);
-  document.getElementById('borrarHistorialMIL').addEventListener('click', clearMILCalcHistory);
+  const btnNavegar = document.getElementById('btnNavegar');
+  const calcularBtn = document.getElementById('calcularBtn');
+  const borrarHistorialMIL = document.getElementById('borrarHistorialMIL');
+
+  if (btnNavegar) btnNavegar.addEventListener('click', toggleVista);
+  if (calcularBtn) calcularBtn.addEventListener('click', calculateMILFinal);
+  if (borrarHistorialMIL) borrarHistorialMIL.addEventListener('click', clearMILCalcHistory);
 
   // Botones de modo en vista calculadora
-  document.getElementById('btnDirecto').addEventListener('click',()=>toggleFireMode('directo'));
-  document.getElementById('btnIndirecto').addEventListener('click',()=>toggleFireMode('indirecto'));
+  const btnDirecto = document.getElementById('btnDirecto');
+  const btnIndirecto = document.getElementById('btnIndirecto');
+  
+  if (btnDirecto) btnDirecto.addEventListener('click',()=>toggleFireMode('directo'));
+  if (btnIndirecto) btnIndirecto.addEventListener('click',()=>toggleFireMode('indirecto'));
 
   // Botones de modo en vista datos
-  document.getElementById('btnManualDirecto').addEventListener('click',()=>setManualFireMode('directo'));
-  document.getElementById('btnManualIndirecto').addEventListener('click',()=>setManualFireMode('indirecto'));
+  const btnManualDirecto = document.getElementById('btnManualDirecto');
+  const btnManualIndirecto = document.getElementById('btnManualIndirecto');
+  
+  if (btnManualDirecto) btnManualDirecto.addEventListener('click',()=>setManualFireMode('directo'));
+  if (btnManualIndirecto) btnManualIndirecto.addEventListener('click',()=>setManualFireMode('indirecto'));
 
   // Selectores de idioma
   document.querySelectorAll('.lang-btn').forEach(btn=>{
@@ -653,30 +736,60 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 
   // Eventos de datos
-  document.getElementById('btnGuardarDato').addEventListener('click', guardarDatoManual);
-  document.getElementById('btnImportarCSV').addEventListener('click', importarCSV);
-  document.getElementById('btnExportarJSON').addEventListener('click', exportarJSON);
-  document.getElementById('btnBorrarDatos').addEventListener('click', borrarTodosDatos);
+  const btnGuardarDato = document.getElementById('btnGuardarDato');
+  const btnImportarCSV = document.getElementById('btnImportarCSV');
+  const btnExportarJSON = document.getElementById('btnExportarJSON');
+  const btnBorrarDatos = document.getElementById('btnBorrarDatos');
+  
+  if (btnGuardarDato) btnGuardarDato.addEventListener('click', guardarDatoManual);
+  if (btnImportarCSV) btnImportarCSV.addEventListener('click', importarCSV);
+  if (btnExportarJSON) btnExportarJSON.addEventListener('click', exportarJSON);
+  if (btnBorrarDatos) btnBorrarDatos.addEventListener('click', borrarTodosDatos);
 
   // Eventos al cambiar SPA
-  document.getElementById('selectorSPA').addEventListener('change', function() {
-    resetFireModeButtons();
-  });
-
-  document.getElementById('inputSPA').addEventListener('change', resetFireModeButtons);
+  const selectorSPA = document.getElementById('selectorSPA');
+  const inputSPA = document.getElementById('inputSPA');
+  
+  if (selectorSPA) selectorSPA.addEventListener('change', resetFireModeButtons);
+  if (inputSPA) inputSPA.addEventListener('change', resetFireModeButtons);
 
   // Eventos Enter en inputs
-  ['distancia','terrenoMIL'].forEach(id=>{
-    document.getElementById(id).addEventListener('keyup',e=>{
+  const distancia = document.getElementById('distancia');
+  const terrenoMIL = document.getElementById('terrenoMIL');
+  
+  if (distancia) {
+    distancia.addEventListener('keyup',e=>{
       if(e.key==='Enter') calculateMILFinal();
     });
-  });
+  }
+  
+  if (terrenoMIL) {
+    terrenoMIL.addEventListener('keyup',e=>{
+      if(e.key==='Enter') calculateMILFinal();
+    });
+  }
 
-  ['inputTerreno','inputCanon','inputDistancia'].forEach(id=>{
-    document.getElementById(id).addEventListener('keyup',e=>{
+  const inputTerreno = document.getElementById('inputTerreno');
+  const inputCanon = document.getElementById('inputCanon');
+  const inputDistancia = document.getElementById('inputDistancia');
+  
+  if (inputTerreno) {
+    inputTerreno.addEventListener('keyup',e=>{
       if(e.key==='Enter') guardarDatoManual();
     });
-  });
+  }
+  
+  if (inputCanon) {
+    inputCanon.addEventListener('keyup',e=>{
+      if(e.key==='Enter') guardarDatoManual();
+    });
+  }
+  
+  if (inputDistancia) {
+    inputDistancia.addEventListener('keyup',e=>{
+      if(e.key==='Enter') guardarDatoManual();
+    });
+  }
 
   // Cerrar modal con tecla ESC
   document.addEventListener('keydown', function(event) {
